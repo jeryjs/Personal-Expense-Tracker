@@ -61,7 +61,7 @@ class ExpenseService {
     async getAllExpenses(): Promise<Expense[]> {
         try {
             const cacheKey = 'all_expenses';
-            const cached = cache.get<Expense[]>(cacheKey);
+            const cached = await cache.get(cacheKey) as Expense[];
             
             if (cached) {
                 return cached;
@@ -84,7 +84,7 @@ class ExpenseService {
                 });
             });
 
-            cache.set(cacheKey, expenses, TTL.MEDIUM);
+            await cache.set(cacheKey, expenses, TTL.MEDIUM);
             return expenses;
         } catch (error) {
             throw new Error(`Failed to fetch expenses: ${error}`);
@@ -97,10 +97,10 @@ class ExpenseService {
     async getExpenseById(id: string): Promise<Expense | null> {
         try {
             const cacheKey = `expense_${id}`;
-            const cached = cache.get<Expense>(cacheKey);
+            const cached = await cache.get(cacheKey);
             
             if (cached) {
-                return cached;
+                return cached as Expense;
             }
 
             const docRef = doc(this.expensesCollection, id);
@@ -121,7 +121,7 @@ class ExpenseService {
                 updatedAt: data.updatedAt.toDate()
             };
 
-            cache.set(cacheKey, expense, TTL.MEDIUM);
+            await cache.set(cacheKey, expense, TTL.MEDIUM);
             return expense;
         } catch (error) {
             throw new Error(`Failed to fetch expense: ${error}`);
@@ -188,10 +188,10 @@ class ExpenseService {
     async getTotalForMonth(month: string): Promise<number> {
         try {
             const cacheKey = `total_month_${month}`;
-            const cached = cache.get<number>(cacheKey);
+            const cached = await cache.get(cacheKey);
             
             if (cached !== undefined) {
-                return cached;
+                return cached as number;
             }
 
             const startDate = `${month}-01`;
@@ -212,7 +212,7 @@ class ExpenseService {
                 total += doc.data().amount;
             });
 
-            cache.set(cacheKey, total, TTL.LONG);
+            await cache.set(cacheKey, total, TTL.LONG);
             return total;
         } catch (error) {
             throw new Error(`Failed to calculate monthly total: ${error}`);
@@ -225,10 +225,10 @@ class ExpenseService {
     async getCategoryTotals(month?: string): Promise<Record<string, number>> {
         try {
             const cacheKey = `category_totals_${month || 'all'}`;
-            const cached = cache.get<Record<string, number>>(cacheKey);
+            const cached = await cache.get(cacheKey);
             
             if (cached) {
-                return cached;
+                return cached as Record<string, number>;
             }
 
             let q = query(this.expensesCollection);
@@ -256,7 +256,7 @@ class ExpenseService {
                 totals[category] = (totals[category] || 0) + data.amount;
             });
 
-            cache.set(cacheKey, totals, TTL.MEDIUM);
+            await cache.set(cacheKey, totals, TTL.MEDIUM);
             return totals;
         } catch (error) {
             throw new Error(`Failed to calculate category totals: ${error}`);
@@ -269,10 +269,10 @@ class ExpenseService {
     async getExpensesByCategory(category: string): Promise<Expense[]> {
         try {
             const cacheKey = `expenses_category_${category}`;
-            const cached = cache.get<Expense[]>(cacheKey);
+            const cached = await cache.get(cacheKey);
             
             if (cached) {
-                return cached;
+                return cached as Expense[];
             }
 
             const q = query(
@@ -297,7 +297,7 @@ class ExpenseService {
                 });
             });
 
-            cache.set(cacheKey, expenses, TTL.MEDIUM);
+            await cache.set(cacheKey, expenses, TTL.MEDIUM);
             return expenses;
         } catch (error) {
             throw new Error(`Failed to fetch expenses by category: ${error}`);
@@ -319,12 +319,12 @@ class ExpenseService {
     /**
      * Clear expenses cache
      */
-    private clearExpensesCache(): void {
-        const keys = cache.keys();
-        keys.forEach(key => {
+    private async clearExpensesCache(): Promise<void> {
+        const keys = await cache.keys();
+        keys.forEach(async (key: string) => {
             if (key.startsWith('expenses_') || key.startsWith('all_expenses') || 
                 key.startsWith('total_month_') || key.startsWith('category_totals_')) {
-                cache.del(key);
+                await cache.del(key);
             }
         });
     }
