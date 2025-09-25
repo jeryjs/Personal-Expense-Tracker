@@ -1,0 +1,16 @@
+{
+  "name": "Personal-Expense-Tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx concurrently \"cd backend && pnpm run dev\" \"cd frontend && pnpm run dev\"",
+    "build": "npx concurrently \"cd backend && pnpm run build\" \"cd frontend && pnpm run build\"",
+    "start": "npx concurrently \"cd backend && pnpm run start\" \"cd frontend && pnpm run start\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.15.0"
+}
