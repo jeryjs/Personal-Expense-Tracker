@@ -13,6 +13,7 @@ services:
       context: .
     environment:
       NODE_ENV: production
+      REDIS_URL: redis://redis:6379
     env_file:
       - ./backend/.env
     ports:
