@@ -252,6 +252,7 @@ class ExpenseService {
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
                 const category = data.category;
+                if (!category) return; // Skip undefined categories
                 totals[category] = (totals[category] || 0) + data.amount;
             });
 
