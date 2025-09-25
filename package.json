@@ -1,21 +1,18 @@
 {
   "name": "personal-expense-tracker",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A personal expense tracker application with a backend server built using Express and Node.js",
   "scripts": {
-    "init": "npx concurrently \"cd backend && pnpm install\" \"cd frontend && pnpm install\"",
-    "dev": "npx concurrently \"cd backend && pnpm run dev\" \"cd frontend && pnpm run dev\"",
-    "build": "npx concurrently \"cd backend && pnpm run build\" \"cd frontend && pnpm run build\"",
-    "start": "npx concurrently \"cd backend && pnpm run start\" \"cd frontend && pnpm run start\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "init": "cd backend && pnpm install",
+    "dev": "cd backend && pnpm run dev",
+    "build": "cd backend && pnpm run build",
+    "start": "cd backend && pnpm run start"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "jeryjs",
+  "license": "MIT",
   "packageManager": "pnpm@10.15.0",
   "workspaces": [
-    "backend",
-    "frontend"
+    "backend"
   ]
 }
