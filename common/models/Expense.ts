@@ -1,9 +1,14 @@
-export default class Expense {
-    constructor(
-        public id: string,
-        public amount: number,
-        public category: string,
-        public date: Date,
-        public description?: string
-    ) {}
+export interface CreateExpenseData {
+    amount: number;
+    category: string;
+    date: string; // ISO date string for Firestore
+    description?: string;
 }
+
+export interface Expense extends CreateExpenseData {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export default Expense;
