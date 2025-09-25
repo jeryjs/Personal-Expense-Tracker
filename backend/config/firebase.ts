@@ -13,4 +13,5 @@ const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG || '{}');
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
-export const db = getFirestore(app);
+const db = getFirestore(app);
+export default db;
